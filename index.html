@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="app_title">حاسبة كميات الخرسانة</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1 data-i18n="app_title">حاسبة كميات الخرسانة</h1>
+      <button id="lang-toggle" class="lang-btn" type="button">English</button>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="foundations" data-i18n="tab_foundations">الأساسات</button>
+      <button class="tab-btn" data-tab="columns" data-i18n="tab_columns">الأعمدة</button>
+      <button class="tab-btn" data-tab="slabs" data-i18n="tab_slabs">الأسقف</button>
+      <button class="tab-btn" data-tab="project" data-i18n="tab_project">إجمالي المشروع</button>
+    </nav>
+
+    <main>
+      <!-- Foundations -->
+      <section class="panel active" id="panel-foundations">
+        <h2 data-i18n="foundations_title">حساب خرسانة الأساسات</h2>
+
+        <div class="field">
+          <label data-i18n="foundation_type">نوع الأساس</label>
+          <select id="foundation-type">
+            <option value="strip" data-i18n="foundation_strip">أساس شريطي</option>
+            <option value="isolated" data-i18n="foundation_isolated">أساس منفصل (قواعد)</option>
+            <option value="mat" data-i18n="foundation_mat">أساس حصيرة (راديير)</option>
+          </select>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label data-i18n="length_m">الطول (م)</label>
+            <input type="number" id="f-length" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="width_m">العرض (م)</label>
+            <input type="number" id="f-width" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="depth_m">العمق/السماكة (م)</label>
+            <input type="number" id="f-depth" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="count">العدد</label>
+            <input type="number" id="f-count" min="1" step="1" value="1">
+          </div>
+        </div>
+
+        <div class="field">
+          <label data-i18n="mix_ratio">نسبة الخلطة (أسمنت : رمل : بحص)</label>
+          <select id="f-mix">
+            <option value="1,1.5,3" data-i18n="mix_rich">غنية 1:1.5:3 (للأعمدة والأسقف)</option>
+            <option value="1,2,4" selected data-i18n="mix_standard">قياسية 1:2:4 (للأساسات)</option>
+            <option value="1,3,6" data-i18n="mix_lean">فقيرة 1:3:6 (خرسانة عادية)</option>
+            <option value="custom" data-i18n="mix_custom">مخصصة</option>
+          </select>
+        </div>
+
+        <div class="grid custom-mix hidden" id="f-custom-mix">
+          <div class="field">
+            <label data-i18n="ratio_cement">أسمنت</label>
+            <input type="number" id="f-mix-cement" min="1" step="0.1" value="1">
+          </div>
+          <div class="field">
+            <label data-i18n="ratio_sand">رمل</label>
+            <input type="number" id="f-mix-sand" min="0" step="0.1" value="2">
+          </div>
+          <div class="field">
+            <label data-i18n="ratio_gravel">بحص</label>
+            <input type="number" id="f-mix-gravel" min="0" step="0.1" value="4">
+          </div>
+        </div>
+
+        <button class="calc-btn" data-calc="foundations" data-i18n="calculate">احسب</button>
+        <div class="result" id="result-foundations"></div>
+      </section>
+
+      <!-- Columns -->
+      <section class="panel" id="panel-columns">
+        <h2 data-i18n="columns_title">حساب خرسانة الأعمدة</h2>
+
+        <div class="field">
+          <label data-i18n="column_shape">شكل العمود</label>
+          <select id="c-shape">
+            <option value="rect" data-i18n="shape_rect">مستطيل / مربع</option>
+            <option value="circle" data-i18n="shape_circle">دائري</option>
+          </select>
+        </div>
+
+        <div class="grid" id="c-rect-fields">
+          <div class="field">
+            <label data-i18n="width_m">العرض (م)</label>
+            <input type="number" id="c-width" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="depth_side_m">العمق/الضلع الآخر (م)</label>
+            <input type="number" id="c-depth" min="0" step="0.01" value="0">
+          </div>
+        </div>
+
+        <div class="grid hidden" id="c-circle-fields">
+          <div class="field">
+            <label data-i18n="diameter_m">القطر (م)</label>
+            <input type="number" id="c-diameter" min="0" step="0.01" value="0">
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label data-i18n="height_m">الارتفاع (م)</label>
+            <input type="number" id="c-height" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="count">العدد</label>
+            <input type="number" id="c-count" min="1" step="1" value="1">
+          </div>
+        </div>
+
+        <div class="field">
+          <label data-i18n="mix_ratio">نسبة الخلطة (أسمنت : رمل : بحص)</label>
+          <select id="c-mix">
+            <option value="1,1.5,3" selected data-i18n="mix_rich">غنية 1:1.5:3 (للأعمدة والأسقف)</option>
+            <option value="1,2,4" data-i18n="mix_standard">قياسية 1:2:4 (للأساسات)</option>
+            <option value="1,3,6" data-i18n="mix_lean">فقيرة 1:3:6 (خرسانة عادية)</option>
+            <option value="custom" data-i18n="mix_custom">مخصصة</option>
+          </select>
+        </div>
+
+        <div class="grid custom-mix hidden" id="c-custom-mix">
+          <div class="field">
+            <label data-i18n="ratio_cement">أسمنت</label>
+            <input type="number" id="c-mix-cement" min="1" step="0.1" value="1">
+          </div>
+          <div class="field">
+            <label data-i18n="ratio_sand">رمل</label>
+            <input type="number" id="c-mix-sand" min="0" step="0.1" value="1.5">
+          </div>
+          <div class="field">
+            <label data-i18n="ratio_gravel">بحص</label>
+            <input type="number" id="c-mix-gravel" min="0" step="0.1" value="3">
+          </div>
+        </div>
+
+        <button class="calc-btn" data-calc="columns" data-i18n="calculate">احسب</button>
+        <div class="result" id="result-columns"></div>
+      </section>
+
+      <!-- Slabs/Roofs -->
+      <section class="panel" id="panel-slabs">
+        <h2 data-i18n="slabs_title">حساب خرسانة الأسقف</h2>
+
+        <div class="grid">
+          <div class="field">
+            <label data-i18n="length_m">الطول (م)</label>
+            <input type="number" id="s-length" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="width_m">العرض (م)</label>
+            <input type="number" id="s-width" min="0" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="thickness_m">السماكة (م)</label>
+            <input type="number" id="s-thickness" min="0" step="0.01" value="0.15">
+          </div>
+          <div class="field">
+            <label data-i18n="count">العدد</label>
+            <input type="number" id="s-count" min="1" step="1" value="1">
+          </div>
+        </div>
+
+        <div class="field">
+          <label data-i18n="mix_ratio">نسبة الخلطة (أسمنت : رمل : بحص)</label>
+          <select id="s-mix">
+            <option value="1,1.5,3" selected data-i18n="mix_rich">غنية 1:1.5:3 (للأعمدة والأسقف)</option>
+            <option value="1,2,4" data-i18n="mix_standard">قياسية 1:2:4 (للأساسات)</option>
+            <option value="1,3,6" data-i18n="mix_lean">فقيرة 1:3:6 (خرسانة عادية)</option>
+            <option value="custom" data-i18n="mix_custom">مخصصة</option>
+          </select>
+        </div>
+
+        <div class="grid custom-mix hidden" id="s-custom-mix">
+          <div class="field">
+            <label data-i18n="ratio_cement">أسمنت</label>
+            <input type="number" id="s-mix-cement" min="1" step="0.1" value="1">
+          </div>
+          <div class="field">
+            <label data-i18n="ratio_sand">رمل</label>
+            <input type="number" id="s-mix-sand" min="0" step="0.1" value="1.5">
+          </div>
+          <div class="field">
+            <label data-i18n="ratio_gravel">بحص</label>
+            <input type="number" id="s-mix-gravel" min="0" step="0.1" value="3">
+          </div>
+        </div>
+
+        <button class="calc-btn" data-calc="slabs" data-i18n="calculate">احسب</button>
+        <div class="result" id="result-slabs"></div>
+      </section>
+
+      <!-- Project totals -->
+      <section class="panel" id="panel-project">
+        <h2 data-i18n="project_title">إجمالي كميات المشروع</h2>
+        <p class="hint" data-i18n="project_hint">اضغط "إضافة إلى المشروع" بعد كل حساب لتجميع الكميات هنا.</p>
+        <table class="project-table">
+          <thead>
+            <tr>
+              <th data-i18n="col_item">البند</th>
+              <th data-i18n="col_volume">حجم الخرسانة (م³)</th>
+              <th data-i18n="col_cement">أسمنت (كيس)</th>
+              <th data-i18n="col_sand">رمل (م³)</th>
+              <th data-i18n="col_gravel">بحص (م³)</th>
+              <th data-i18n="col_action"></th>
+            </tr>
+          </thead>
+          <tbody id="project-body"></tbody>
+          <tfoot>
+            <tr>
+              <td data-i18n="total">الإجمالي</td>
+              <td id="total-volume">0.00</td>
+              <td id="total-cement">0.00</td>
+              <td id="total-sand">0.00</td>
+              <td id="total-gravel">0.00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+        <button class="clear-btn" id="clear-project" data-i18n="clear_project">تفريغ الجدول</button>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p data-i18n="footer_note">النتائج تقديرية للمساعدة في التخطيط، ويُنصح بمراجعة مهندس مختص قبل التنفيذ.</p>
+    </footer>
+  </div>
+
+  <script src="js/translations.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
